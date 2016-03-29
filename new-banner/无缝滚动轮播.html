@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js" type="text/javascript"></script>
+		<style type="text/css">
+			* {
+				margin: 0px;
+				padding: 0px;
+				list-style: none;
+			}
+			
+			.banner {
+				margin: 100px auto;
+				border: 1px solid;
+				width: 550px;
+				height: 300px;
+				overflow: hidden;
+				position: relative;
+			}
+			
+			.banner .img {
+				width: 5000px;
+				position: absolute;
+				left: 0px;
+				top: 0px;
+			}
+			
+			.banner .img li {
+				float: left;
+			}
+			
+			.banner .num {
+				position: absolute;
+				width: 100%;
+				bottom: 10px;
+				left: 0;
+				text-align: center;
+				font-size: 0px;
+			}
+			
+			.banner .num li {
+				width: 10px;
+				height: 10px;
+				background: #888;
+				border-radius: 50%;
+				display: inline-block;
+				margin: 0 3px;
+				cursor: pointer;
+			}
+			
+			.banner .btn {
+				width: 30px;
+				height: 50px;
+				background: rgba(0, 0, 0, 0.4);
+				position: absolute;
+				top: 50%;
+				margin-top: -25px;
+				cursor: pointer;
+				text-align: center;
+				line-height: 50px;
+				color: #fff;
+				font-size: 40px;
+				font-family: "宋体";
+				display: none;
+			}
+			
+			.banner:hover .btn {
+				display: block;
+			}
+			
+			.banner .btn_l {
+				left: 0px;
+			}
+			
+			.banner .btn_r {
+				right: 0;
+			}
+			
+			.banner .num li.on {
+				background: #f60;
+			}
+			
+			a {
+				font-size: 30px;
+				text-decoration: none;
+			}
+		</style>
+		<script type="text/javascript">
+			$(function() {
+				var i = 0;
+				var clone = $(".banner .img li").first().clone()
+				$(".banner .img").append(clone);
+				var size = $(".banner .img li").size();
+				/*圆点循环出来的*/
+				for (var j = 0; j < size - 1; j++) {
+					$(".banner .num").append("<li></li>");
+				};
+				$(".banner .num li").first().addClass("on");
+				/*鼠标划入圆点*/
+				$(".banner .num li").hover(function() {
+					var index = $(this).index();
+					i = index;
+					$(".banner .img").stop().animate({
+						left: -index * 550
+					}, 500)
+					$(this).addClass("on").siblings().removeClass("on");
+				});
+				/*自动轮播*/
+				var t = setInterval(function() {
+					i++;
+					move();
+				}, 2000);
+				/*对banner定时器的操作*/
+				$(".banner").hover(function() {
+					clearInterval(t);
+				}, function() {
+					t = setInterval(function() {
+						i++;
+						move();
+					}, 2000);
+				});
+				/*向左的按钮*/
+				$(".banner .btn_l").click(function() {
+					i++;
+					move();
+				});
+				/*向右的按钮*/
+				$(".banner .btn_r").click(function() {
+					i--;
+					move();
+				});
+
+				function move() {
+					if (i == size) {
+						$(".banner .img").css({
+							left: 0
+						})
+						i = 1;
+					}
+					if (i == -1) {
+						$(".banner .img").css({
+							left: -(size - 1) * 550
+						})
+						i = size - 2;
+					}
+					$(".banner .img").stop().animate({
+						left: -i * 550
+					}, 500)
+					if (i == size - 1) {
+						$(".banner .num li").eq(0).addClass("on").siblings().removeClass("on");
+					} else {
+						$(".banner .num li").eq(i).addClass("on").siblings().removeClass("on");
+					}
+				};
+			});
+		</script>
+	</head>
+
+	<body>
+		<div class="banner">
+			<ul class="img">
+				<li style="width: 550px;height: 300px;background: yellow;">
+					<a href="">1</a>
+				</li>
+				<li style="width: 550px;height: 300px;background: red;">
+					<a href="">2</a>
+				</li>
+				<li style="width: 550px;height: 300px;background: orange;">
+					<a href="">3</a>
+				</li>
+				<li style="width: 550px;height: 300px;background: aqua;">
+					<a href="">4</a>
+				</li>
+			</ul>
+
+			<ul class="num">
+
+			</ul>
+			<div class="btn btn_l">&lt;</div>
+			<div class="btn btn_r">&gt;</div>
+		</div>
+	</body>
+
+</html>
